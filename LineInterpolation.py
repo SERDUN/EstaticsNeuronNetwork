@@ -14,7 +14,6 @@ output_nodes = 2
 learning_rate = 0.1
 formatedTrainData = []
 
-
 # Підготовка навчальних даних
 
 train_30_data_incorrect = json.loads(open("train_data/30_train_data_incorrect.json").read())['result']
@@ -23,12 +22,9 @@ flush = numpy.zeros(sizeInput)
 firsPerson = train_30_data_correct
 secondPerson = train_30_data_incorrect
 
-
-
 # Підготовка тестових даних
 test_incorrect_data = json.loads(open("test_data/tests_incorect_data.json").read())['result'][0]
 test_correct_data = json.loads(open("test_data/tests_corect_data.json").read())['result'][0]
-
 
 
 def interpolateAndNormalizeDate(dots, identificator):
@@ -93,16 +89,18 @@ def guessTest(msg, json):
 # Підготовка тренувальних даних
 
 
-
 def prepareDataFor1Test():
+    secondPersonData = []
     for x in range(len(firsPerson)):
-        result = interpolateAndNormalizeDate(firsPerson[x], 0)
-        formatedTrainData.append(prepareArray(result[:sizeInput]))
-    drawNormalizarionValue(formatedTrainData, "First test")
+        result = interpolateAndNormalizeDate(firsPerson[x], 1)
+        flush = prepareArray(result[:sizeInput])
+        formatedTrainData.append(flush)
+        secondPersonData.append(flush)
+    drawNormalizarionValue(secondPersonData, "First test")
 
 
 def prepareDataFor2Test():
-    secondPersonData=[]
+    secondPersonData = []
     for x in range(len(secondPerson)):
         result = interpolateAndNormalizeDate(firsPerson[x], 1)
         flush = prepareArray(result[:sizeInput])
@@ -114,10 +112,8 @@ def prepareDataFor2Test():
 def trainNetwork():
     epochs = 20
     for e in range(epochs):
-        random.shuffle(formatedTrainData)
         for record in formatedTrainData:
             all_values = record
-
 
             inputs = (numpy.asfarray(all_values[1:]) * 0.99) + 0.01
             targets = numpy.zeros(output_nodes) + 0.01
@@ -125,15 +121,16 @@ def trainNetwork():
             n.train(inputs, targets)
 
 
-showUserTest()
-prepareDataFor2Test()
-
 prepareDataFor1Test()
+prepareDataFor2Test()
+random.shuffle(formatedTrainData)
+
+
+
 n = NeuralNetwork(input_nodes, hidden_nodes, output_nodes, learning_rate)
 trainNetwork()
-
 
 guessTest("(0) [result for correct test: ]: ", test_correct_data)
 guessTest("(1) [result for incorrect test: ]: ", test_incorrect_data)
 
-plt.show()
+showUserTest()
