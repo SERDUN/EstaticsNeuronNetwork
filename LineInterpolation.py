@@ -94,18 +94,19 @@ def prepareDataFor1Test():
     for x in range(len(firsPerson)):
         result = interpolateAndNormalizeDate(firsPerson[x], 1)
         flush = prepareArray(result[:sizeInput])
-        formatedTrainData.append(flush)
         secondPersonData.append(flush)
+
+    formatedTrainData.extend(secondPersonData)
     drawNormalizarionValue(secondPersonData, "First test")
 
 
 def prepareDataFor2Test():
     secondPersonData = []
     for x in range(len(secondPerson)):
-        result = interpolateAndNormalizeDate(secondPerson[x], 1)
+        result = interpolateAndNormalizeDate(secondPerson[x], 0)
         flush = prepareArray(result[:sizeInput])
-        formatedTrainData.append(flush)
         secondPersonData.append(flush)
+    formatedTrainData.extend(secondPersonData[:])
     drawNormalizarionValue(secondPersonData, "Second test")
 
 
@@ -117,15 +118,15 @@ def trainNetwork():
 
             inputs = (numpy.asfarray(all_values[1:]) * 0.99) + 0.01
             targets = numpy.zeros(output_nodes) + 0.01
-            targets[int(all_values[0])] = 0.99
+
+            index_correct_answer = int(all_values[0])
+            targets[index_correct_answer] = 0.99
             n.train(inputs, targets)
 
 
 prepareDataFor1Test()
 prepareDataFor2Test()
 random.shuffle(formatedTrainData)
-
-
 
 n = NeuralNetwork(input_nodes, hidden_nodes, output_nodes, learning_rate)
 trainNetwork()
