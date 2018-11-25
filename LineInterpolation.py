@@ -7,12 +7,13 @@ import numpy
 
 from Calc import NeuralNetwork
 
-sizeInput = 401
+sizeInput = 2000
 input_nodes = sizeInput - 1
-hidden_nodes = 200
+hidden_nodes = 250
 output_nodes = 2
-learning_rate = 0.1
+learning_rate = 0.2
 formatedTrainData = []
+epochs = 10
 
 # Підготовка навчальних даних
 
@@ -35,7 +36,7 @@ def interpolateAndNormalizeDate(dots, identificator):
         x1 = dots['xReal'][i]
         y1 = dots['yReal'][i]
         x2 = dots['xReal'][i + 1]
-        y2 = dots['xReal'][i + 1]
+        y2 = dots['yReal'][i + 1]
         if x1 - x2 != 0:
             k = (y1 - y2) / (x1 - x2)
             b = y2 - k * x2
@@ -53,8 +54,8 @@ def interpolateAndNormalizeDate(dots, identificator):
         normValue = numerator / denominator
         tmp.append(normValue)
     new = []
-    for line in tmp[::5]: new.append(line)
-    return new
+    # for line in tmp[50::5]: new.append(line)
+    return tmp
 
 
 def showUserTest():
@@ -111,7 +112,6 @@ def prepareDataFor2Test():
 
 
 def trainNetwork():
-    epochs = 20
     for e in range(epochs):
         for record in formatedTrainData:
             all_values = record
