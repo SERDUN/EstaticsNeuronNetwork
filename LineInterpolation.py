@@ -102,7 +102,7 @@ def prepareDataFor1Test():
 def prepareDataFor2Test():
     secondPersonData = []
     for x in range(len(secondPerson)):
-        result = interpolateAndNormalizeDate(firsPerson[x], 1)
+        result = interpolateAndNormalizeDate(secondPerson[x], 1)
         flush = prepareArray(result[:sizeInput])
         formatedTrainData.append(flush)
         secondPersonData.append(flush)
