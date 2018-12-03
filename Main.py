@@ -4,34 +4,25 @@ import numpy as np
 import numpy
 
 from Calc import NeuralNetwork
-from Data import train_data_correct, train_data_incorrect, test_correct_data, test_incorrect_data
+from Data import train_data_0, train_data_1, test_data_0, train_data_2
 from Utils import interpolateAndNormalizeDate, prepareArray
 from VisualizationData import drawNormalizarionValue, showUserTest
 
-sizeInput = 2000
+sizeInput = 600
 input_nodes = sizeInput - 1
-hidden_nodes = 250
+hidden_nodes = 100
 output_nodes = 2
 learning_rate = 0.2
 formatedTrainData = []
-epochs = 10
+epochs = 15
 
 # Підготовка навчальних даних
-
-flush = numpy.zeros(sizeInput)
-firsPerson = train_data_correct
-secondPerson = train_data_incorrect
-
-
-
-
-
 
 
 
 def guessTest(msg, json):
     result = interpolateAndNormalizeDate(json, 1)
-    formatedTestData = prepareArray(result,sizeInput)
+    formatedTestData = prepareArray(result, sizeInput)
     result = n.query(((numpy.asfarray(formatedTestData[:sizeInput - 1]) * 0.99) + 0.01))
     drawNormalizarionValue([formatedTestData], msg)
     print(str(msg) + " ->")
@@ -41,25 +32,17 @@ def guessTest(msg, json):
 # Підготовка тренувальних даних
 
 
-def prepareDataFor1Test():
-    secondPersonData = []
-    for x in range(len(firsPerson)):
-        result = interpolateAndNormalizeDate(firsPerson[x], 1)
-        flush = prepareArray(result[:sizeInput],sizeInput)
-        secondPersonData.append(flush)
 
+
+
+def prepareDataForTest(data, title, id_result):
+    secondPersonData = []
+    for x in range(len(data)):
+        result = interpolateAndNormalizeDate(data[x], id_result)
+        flush = prepareArray(result[:sizeInput], sizeInput)
+        secondPersonData.append(flush)
     formatedTrainData.extend(secondPersonData)
-    drawNormalizarionValue(secondPersonData, "First test")
-
-
-def prepareDataFor2Test():
-    secondPersonData = []
-    for x in range(len(secondPerson)):
-        result = interpolateAndNormalizeDate(secondPerson[x], 0)
-        flush = prepareArray(result[:sizeInput],sizeInput)
-        secondPersonData.append(flush)
-    formatedTrainData.extend(secondPersonData[:])
-    drawNormalizarionValue(secondPersonData, "Second test")
+    drawNormalizarionValue(secondPersonData, title)
 
 
 def trainNetwork():
@@ -75,15 +58,19 @@ def trainNetwork():
             n.train(inputs, targets)
 
 
-prepareDataFor1Test()
-prepareDataFor2Test()
-random.shuffle(formatedTrainData)
+prepareDataForTest(train_data_0, "Vlad", 0)
+prepareDataForTest(train_data_1, "Kate", 1)
+prepareDataForTest(train_data_2, "Kate", 1)
+# prepareDataForTest(train_data_2, "Dima", 2)
+
+
+# random.shuffle(formatedTrainData)
 
 n = NeuralNetwork(input_nodes, hidden_nodes, output_nodes, learning_rate)
 trainNetwork()
 
-guessTest("incorrect:  ", test_correct_data[0])
+guessTest("Kate: ", test_data_0[1])
+# guessTest("incorrect: 1  ", test_incorrect_data[0])
 # guessTest("(1) [result for correct test: ]: ", test_correct_data[0])
 
 
-showUserTest(train_data_correct[0], train_data_incorrect[0])
