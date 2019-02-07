@@ -19,10 +19,10 @@ class NeuralNetwork:
         # weights inside the arrays are w_i_j, where link is from node i to node j in the next layer
         # w11 w21
         # w12 w22 etc
-        numpy.random.seed(44)
+        # numpy.random.seed(44)
+        numpy.random.seed(33)
 
         self.wih = numpy.random.normal(0.0, pow(self.inodes, -0.5), (self.hnodes, self.inodes))
-        numpy.random.seed(44)
 
         self.who = numpy.random.normal(0.0, pow(self.hnodes, -0.5), (self.onodes, self.hnodes))
         # with open('wih.txt', 'w') as f:

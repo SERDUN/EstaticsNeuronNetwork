@@ -12,35 +12,79 @@ def interpolateAndNormalizeDate(dots, identificator):
 
     size_list = len(dots['yReal']) - 1
 
-    filteredDataX = dots["xReal"][100:size_list - 50]
-    filteredDataY = dots["yReal"][100:size_list - 50]
-    for i in range(1, len(filteredDataX) - 1):
-
-        x1 = filteredDataX[i]
-        y1 = filteredDataY[i]
-        x2 = filteredDataX[i + 1]
-        y2 = filteredDataY[i + 1]
-        if x1 - x2 != 0:
-            k = (y1 - y2) / (x1 - x2)
-            b = y2 - k * x2
-            for j in range(x2 - x1): newXX.append(x2 + j)
-            for j in range(x2 - x1): newYY.append((x2 + j) * k + b)
-
+    filteredDataX = dots["xReal"]
+    filteredDataY = dots["yReal"]
+    # for i in range(1, len(filteredDataX) - 1):
+    #
+    #     x1 = filteredDataX[i]
+    #     y1 = filteredDataY[i]
+    #     x2 = filteredDataX[i + 1]
+    #     y2 = filteredDataY[i + 1]
+    #     if x1 - x2 != 0:
+    #         k = (y1 - y2) / (x1 - x2)
+    #         b = y2 - k * x2
+    #         for j in range(x2 - x1): newXX.append(x2 + j)
+    #         for j in range(x2 - x1): newYY.append((x2 + j) * k + b)
+    #
     tmp = []
-    maxValue = max(newYY)
-    minValue = min(newYY)
+
+    maxValue = max(filteredDataY)
+    minValue = min(filteredDataY)
+
     tmp.append(identificator)
-    for i in range(len(newYY)):
-        current = newYY[i]
+    for i in range(len(filteredDataY)):
+        current = filteredDataY[i]
         numerator = current - minValue
         denominator = maxValue - minValue
         normValue = numerator / denominator
+
         tmp.append(normValue)
     new = []
-    for line in tmp[0::100]: new.append(line)
+    for line in tmp[0::15]: new.append(line)
+
     return new
 
 
+
+#
+#
+# def interpolateAndNormalizeDate(dots, identificator):
+#     # newXX = []
+#     # newYY = []
+#
+#     size_list = len(dots['yReal']) - 1
+#
+#     filteredDataX = dots["xReal"]
+#     filteredDataY = dots["yReal"]
+#     # for i in range(1, len(filteredDataX) - 1):
+#     #
+#     #     x1 = filteredDataX[i]
+#     #     y1 = filteredDataY[i]
+#     #     x2 = filteredDataX[i + 1]
+#     #     y2 = filteredDataY[i + 1]
+#     #     if x1 - x2 != 0:
+#     #         k = (y1 - y2) / (x1 - x2)
+#     #         b = y2 - k * x2
+#     #         for j in range(x2 - x1): newXX.append(x2 + j)
+#     #         for j in range(x2 - x1): newYY.append((x2 + j) * k + b)
+#
+#     tmp = []
+#
+#     maxValue = max(filteredDataY)
+#     minValue = min(filteredDataY)
+#
+#     tmp.append(identificator)
+#     for i in range(len(filteredDataY)):
+#         current = filteredDataY[i]
+#         numerator = current - minValue
+#         denominator = maxValue - minValue
+#         normValue = numerator / denominator
+#
+#         tmp.append(normValue)
+#     new = []
+#     for line in tmp[0::15]: new.append(line)
+#
+#     return new
 def interpolateDate(dots, identificator):
     newXX = []
     newYY = []
@@ -76,8 +120,6 @@ def getSignsForData(x, y):
     yMax = max(y)
     s = 0
     dt_dx = 0;
-    overflow = 0
-
     for i in range(len(y) - 1):
         s += y[i] * (x[i + 1] - x[i])
         c = y[i + 1] - y[i]

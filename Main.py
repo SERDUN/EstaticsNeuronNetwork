@@ -2,19 +2,20 @@ import random
 
 import numpy as np
 import numpy
+import matplotlib.pyplot as plt
 
 from Calc import NeuralNetwork
-from Data import train_data_0, train_data_1, test_data_0, train_data_2
+from Data import train_data_0, train_data_3, test_data_1, test_data_0
 from Utils import interpolateAndNormalizeDate, prepareArray
-from VisualizationData import drawNormalizarionValue, showUserTest
+from VisualizationData import drawNormalizarionValue
 
-sizeInput = 600
+sizeInput = 900
 input_nodes = sizeInput - 1
-hidden_nodes = 100
+hidden_nodes = 50
 output_nodes = 2
-learning_rate = 0.2
+learning_rate = 0.1
 formatedTrainData = []
-epochs = 15
+epochs = 20
 
 # Підготовка навчальних даних
 
@@ -58,19 +59,32 @@ def trainNetwork():
             n.train(inputs, targets)
 
 
-prepareDataForTest(train_data_0, "Vlad", 0)
-prepareDataForTest(train_data_1, "Kate", 1)
-prepareDataForTest(train_data_2, "Kate", 1)
-# prepareDataForTest(train_data_2, "Dima", 2)
+random.seed(33)
+prepareDataForTest(train_data_0, "not calm 1", 0)
+prepareDataForTest(train_data_3, "calm 3", 1)
+random.shuffle(formatedTrainData)
 
-
-# random.shuffle(formatedTrainData)
 
 n = NeuralNetwork(input_nodes, hidden_nodes, output_nodes, learning_rate)
 trainNetwork()
 
-guessTest("Kate: ", test_data_0[1])
-# guessTest("incorrect: 1  ", test_incorrect_data[0])
-# guessTest("(1) [result for correct test: ]: ", test_correct_data[0])
+guessTest(" not Calm: ", test_data_0[0])
+
+
+
+x = test_data_0[1]["xReal"]
+y = test_data_0[1]["yReal"]
+plt.plot(x, y)
+
+plt.gca().invert_yaxis()
+plt.show()
+
+
+x = train_data_0[1]["xReal"]
+y = train_data_0[1]["yReal"]
+plt.gca().invert_yaxis()
+plt.plot(x, y)
+plt.show()
+
 
 

@@ -4,17 +4,17 @@ import numpy
 import matplotlib.pyplot as plt
 
 from Calc import NeuralNetwork
-from Data import train_data_0, train_data_1, test_data_0, test_data_1, train_data_2
+from Data import train_data_0, test_data_0, test_data_1, train_data_3
 from Utils import getSignsForData, normalization
 
 sizeInput = 6
 input_nodes = sizeInput - 1
-hidden_nodes = 100
-output_nodes = 3
-learning_rate = 0.2
+hidden_nodes = 4
+output_nodes = 2
+learning_rate = 0.1
 formatedTrainData = []
 formatedTestData = []
-epochs = 15
+epochs = 10
 
 
 def trainNetwork():
@@ -52,14 +52,10 @@ def prepareDataForTest(data, list, id_result, name):
     print()
 
 
-prepareDataForTest(train_data_0, formatedTrainData, 0, "vlad")  # vlad
-prepareDataForTest(train_data_1, formatedTrainData, 1, "serdun")  # serdun
-prepareDataForTest(train_data_2, formatedTrainData, 2, "loha")  # loha
-
-prepareDataForTest(test_data_0, formatedTestData, 1, "serdun")  # serdun
+prepareDataForTest(train_data_0, formatedTrainData, 0, "not calm")  # not calm 1
+prepareDataForTest(train_data_3, formatedTrainData, 1, "calm")  # calm 3
+prepareDataForTest(test_data_1, formatedTestData,0, "not calm")  # serdun
 random.shuffle(formatedTrainData)
-
-# prepareDataForTest(train_data_1, "Kate", 1)
 
 n = NeuralNetwork(input_nodes, hidden_nodes, output_nodes, learning_rate)
 trainNetwork()
